@@ -34,7 +34,9 @@ namespace PitStop
 
             // add custom services
             services.AddTransient<ICustomerManagementAPI, CustomerManagementAPI>();
-            services.AddTransient<IVehicleManagementAPI, VehicleManagementAPI>();
+
+            string apiHostAndPort = _configuration.GetSection("APIServiceLocations").GetValue<string>("VehicleManagementAPI");
+            services.AddTransient<IVehicleManagementAPI>(s => new VehicleManagementAPI(apiHostAndPort));
             services.AddTransient<IWorkshopManagementAPI, WorkshopManagementAPI>();
 
             services.AddHealthChecks(checks =>

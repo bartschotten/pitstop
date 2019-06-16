@@ -13,9 +13,8 @@ namespace WebApp.RESTClients
     {
         private IVehicleManagementAPI _client;
 
-        public  VehicleManagementAPI(IConfiguration config)
+        public  VehicleManagementAPI(string apiHostAndPort)
         {
-            string apiHostAndPort = config.GetSection("APIServiceLocations").GetValue<string>("VehicleManagementAPI");
             string baseUri = $"http://{apiHostAndPort}/api";
             _client = RestService.For<IVehicleManagementAPI>(baseUri);
         }

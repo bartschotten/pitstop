@@ -1,0 +1,46 @@
+{
+  "consumer": {
+    "name": "Pitstop Web App"
+  },
+  "provider": {
+    "name": "Vehicle Management"
+  },
+  "interactions": [
+    {
+      "description": "a request to return the vehicle with license number 'HJ-476-S'",
+      "providerState": "there is a vehicle with license number 'HJ-476-S'",
+      "request": {
+        "method": "get",
+        "path": "/api/vehicles/HJ-476-S"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "body": {
+          "brand": "Toyota",
+          "type": "Auris",
+          "owner": "29ab5095-50c6-43b2-aa1d-0ff13eaf1ec8"
+        },
+        "matchingRules": {
+          "$.body.brand": {
+            "match": "type"
+          },
+          "$.body.type": {
+            "match": "type"
+          },
+          "$.body.owner": {
+            "match": "regex",
+            "regex": "(^([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})$)"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
