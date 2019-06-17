@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkshopManagementAPI", "Wo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkshopManagementEventHandler", "WorkshopManagementEventHandler\WorkshopManagementEventHandler.csproj", "{EC54480B-1C3A-4CFE-AA76-B0A4E556281C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.ContractTests", "WebApp.ContractTests\WebApp.ContractTests\WebApp.ContractTests.csproj", "{5D7A9FAB-6A9F-4E04-9942-D1BC934F9871}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp.ContractTests", "WebApp.ContractTests\WebApp.ContractTests\WebApp.ContractTests.csproj", "{5D7A9FAB-6A9F-4E04-9942-D1BC934F9871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleManagementAPI.ContractTests", "VehicleManagementAPI.ContractTests\VehicleManagementAPI.ContractTests\VehicleManagementAPI.ContractTests.csproj", "{952FA76B-5974-4078-9035-4D084359D334}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{5D7A9FAB-6A9F-4E04-9942-D1BC934F9871}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D7A9FAB-6A9F-4E04-9942-D1BC934F9871}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D7A9FAB-6A9F-4E04-9942-D1BC934F9871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{952FA76B-5974-4078-9035-4D084359D334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{952FA76B-5974-4078-9035-4D084359D334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{952FA76B-5974-4078-9035-4D084359D334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{952FA76B-5974-4078-9035-4D084359D334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
