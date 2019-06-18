@@ -25,7 +25,7 @@ namespace VehicleManagementAPI.ContractTests
 
             _webHost = new WebHostBuilder()
                 .UseUrls(_providerUri)
-                .UseStartup<Pitstop.Application.VehicleManagement.Startup>()
+                .UseStartup<TestStartup>()
                 .Build();
 
             _webHost.Start();
@@ -40,7 +40,6 @@ namespace VehicleManagementAPI.ContractTests
                 .ServiceProvider($"vehicle management", _providerUri)
                 .PactUri($"..\\..\\..\\..\\WebApp.ContractTests\\pacts\\pitstop_web_app-vehicle_management.json")
                 .Verify();
-
         }
 
         [ClassCleanup]

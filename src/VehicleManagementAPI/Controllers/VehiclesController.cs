@@ -2,38 +2,38 @@
 using Microsoft.AspNetCore.Mvc;
 using Pitstop.Application.VehicleManagement.Model;
 using Pitstop.Application.VehicleManagement.DataAccess;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using Pitstop.Infrastructure.Messaging;
 using Pitstop.Application.VehicleManagement.Events;
 using Pitstop.Application.VehicleManagement.Commands;
+using System;
 
 namespace Pitstop.Application.VehicleManagement.Controllers
 {
     [Route("/api/[controller]")]
     public class VehiclesController : Controller
     {
-        IMessagePublisher _messagePublisher;
-        VehicleManagementDBContext _dbContext;
+        private readonly IVehicleRepository _vehicleRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public VehiclesController(VehicleManagementDBContext dbContext, IMessagePublisher messagePublisher)
+        public VehiclesController(IVehicleRepository vehicleRepository, IMessagePublisher messagePublisher)
         {
-            _dbContext = dbContext;
+            _vehicleRepository = vehicleRepository;
             _messagePublisher = messagePublisher;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await _dbContext.Vehicles.ToListAsync());
+            return Ok(await _vehicleRepository.GetAllAsync());
         }
 
         [HttpGet]
         [Route("{licenseNumber}", Name = "GetByLicenseNumber")]
         public async Task<IActionResult> GetByLicenseNumber(string licenseNumber)
         {
-            var vehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.LicenseNumber == licenseNumber);
+            var vehicle = await _vehicleRepository.GetByLicenseNumberAsync(licenseNumber);
             if (vehicle == null)
             {
                 return NotFound();
@@ -50,8 +50,7 @@ namespace Pitstop.Application.VehicleManagement.Controllers
                 {
                     // insert vehicle
                     Vehicle vehicle = Mapper.Map<Vehicle>(command);
-                    _dbContext.Vehicles.Add(vehicle);
-                    await _dbContext.SaveChangesAsync();
+                    await _vehicleRepository.RegisterAsync(vehicle);
 
                     // send event
                     var e = Mapper.Map<VehicleRegistered>(command);
@@ -62,7 +61,7 @@ namespace Pitstop.Application.VehicleManagement.Controllers
                 }
                 return BadRequest();
             }
-            catch (DbUpdateException)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "Unable to save changes. " +
                     "Try again, and if the problem persists " +

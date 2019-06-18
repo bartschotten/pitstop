@@ -3,36 +3,30 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Pitstop.Application.VehicleManagement.DataAccess;
 using Swashbuckle.AspNetCore.Swagger;
-using AutoMapper;
-using Pitstop.Application.VehicleManagement.Model;
 using Pitstop.Infrastructure.Messaging;
-using Pitstop.Application.VehicleManagement.Commands;
-using Pitstop.Application.VehicleManagement.Events;
-using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Microsoft.Extensions.HealthChecks;
 
 namespace Pitstop.Application.VehicleManagement
 {
-    public class Startup
+    public class Startup : BaseStartup
     {
-        private IConfiguration _configuration;
-
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration) : base(configuration)
         {
-            _configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(IServiceCollection services)
         {
             // add DBContext classes
             var sqlConnectionString = _configuration.GetConnectionString("VehicleManagementCN");
             services.AddDbContext<VehicleManagementDBContext>(options => options.UseSqlServer(sqlConnectionString));
+
+            // add Repository classes
+            services.AddTransient<IVehicleRepository, VehicleRepository>();
 
             // add messagepublisher classes
             var configSection = _configuration.GetSection("RabbitMQ");
@@ -40,10 +34,6 @@ namespace Pitstop.Application.VehicleManagement
             string userName = configSection["UserName"];
             string password = configSection["Password"];
             services.AddTransient<IMessagePublisher>((sp) => new RabbitMQMessagePublisher(host, userName, password, "Pitstop"));
-
-            // Add framework services.
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -59,18 +49,12 @@ namespace Pitstop.Application.VehicleManagement
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
+        public override void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(_configuration)
                 .Enrich.WithMachineName()
                 .CreateLogger();
-
-            app.UseMvc();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
-            SetupAutoMapper();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -86,17 +70,6 @@ namespace Pitstop.Application.VehicleManagement
             {
                 scope.ServiceProvider.GetService<VehicleManagementDBContext>().MigrateDB();
             }                     
-        }
-
-        private void SetupAutoMapper()
-        {
-            // setup automapper
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<RegisterVehicle, Vehicle>();
-                cfg.CreateMap<RegisterVehicle, VehicleRegistered>()
-                    .ForCtorParam("messageId", opt => opt.MapFrom(c => Guid.NewGuid()));
-            });
         }
     }
 }
