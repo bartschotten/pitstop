@@ -58,14 +58,19 @@ namespace WebApp.ContractTests
                     {
                         brand = Match.Type("Toyota"),
                         type = Match.Type("Auris"),
-                        owner = Match.Regex("29ab5095-50c6-43b2-aa1d-0ff13eaf1ec8", "(^([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})$)")
+                        ownerId = Match.Regex("29ab5095-50c6-43b2-aa1d-0ff13eaf1ec8", "(^([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})$)")
                     }
                 });
 
             var consumer = new VehicleManagementAPI(_mockProviderHostAndPort);
 
-            //Act //Assert
+            //Act + Assert
             var response = await consumer.GetVehicleByLicenseNumber(licenseNumber);
+
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Brand);
+            Assert.IsNotNull(response.Type);
+            Assert.IsNotNull(response.OwnerId);
 
             _mockProviderService.VerifyInteractions();
         }

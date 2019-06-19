@@ -40,7 +40,7 @@ namespace VehicleManagementAPI.ContractTests
                     {
                         var state = providerState.State;
 
-                        if (state.StartsWith("a request to return the vehicle with license number"))
+                        if (state.StartsWith("there is a vehicle with license number"))
                         {
                             var licenseNumber = state.Split("'")[1];
                             var vehicle = new Vehicle

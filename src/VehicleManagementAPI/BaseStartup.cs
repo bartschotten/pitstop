@@ -7,8 +7,6 @@ using Pitstop.Application.VehicleManagement.Model;
 using Pitstop.Application.VehicleManagement.Commands;
 using Pitstop.Application.VehicleManagement.Events;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Pitstop.Application.VehicleManagement.DataAccess;
 
 namespace Pitstop.Application.VehicleManagement
 {
@@ -21,7 +19,6 @@ namespace Pitstop.Application.VehicleManagement
             _configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
@@ -29,10 +26,8 @@ namespace Pitstop.Application.VehicleManagement
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
+        public virtual void Configure(IApplicationBuilder app)
         {
-
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Pitstop.Application.VehicleManagement;
 using Pitstop.Application.VehicleManagement.DataAccess;
+using Pitstop.Infrastructure.Messaging;
 
 namespace VehicleManagementAPI.ContractTests
 {
@@ -13,14 +14,19 @@ namespace VehicleManagementAPI.ContractTests
         {
         }
 
-        public override void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
-        {
-            app.UseMiddleware<ProviderStateMiddleware>();
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
+            base.ConfigureServices(services);
+
             services.AddTransient<IVehicleRepository, FakeVehicleRepository>();
+            services.AddTransient<IMessagePublisher>(m => new Mock<IMessagePublisher>().Object);
         }
+
+        public override void Configure(IApplicationBuilder app)
+        {
+            base.Configure(app);
+
+            app.UseMiddleware<ProviderStateMiddleware>();
+        }      
     }
 }

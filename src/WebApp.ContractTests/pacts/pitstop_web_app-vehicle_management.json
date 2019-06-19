@@ -21,7 +21,7 @@
         "body": {
           "brand": "Toyota",
           "type": "Auris",
-          "owner": "29ab5095-50c6-43b2-aa1d-0ff13eaf1ec8"
+          "ownerId": "29ab5095-50c6-43b2-aa1d-0ff13eaf1ec8"
         },
         "matchingRules": {
           "$.body.brand": {
@@ -30,7 +30,7 @@
           "$.body.type": {
             "match": "type"
           },
-          "$.body.owner": {
+          "$.body.ownerId": {
             "match": "regex",
             "regex": "(^([0-9A-Fa-f]{8}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{4}[-][0-9A-Fa-f]{12})$)"
           }

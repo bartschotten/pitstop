@@ -12,6 +12,9 @@ namespace VehicleManagementAPI.ContractTests
             _output = context;
         }
 
-        public void WriteLine(string line) => _output.WriteLine(line);
+        public void WriteLine(string line)
+        {
+            _output.WriteLine(line);
+        }
     }
 }

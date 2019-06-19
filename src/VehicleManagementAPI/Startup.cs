@@ -21,6 +21,8 @@ namespace Pitstop.Application.VehicleManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public override void ConfigureServices(IServiceCollection services)
         {
+            base.ConfigureServices(services);
+
             // add DBContext classes
             var sqlConnectionString = _configuration.GetConnectionString("VehicleManagementCN");
             services.AddDbContext<VehicleManagementDBContext>(options => options.UseSqlServer(sqlConnectionString));
@@ -49,8 +51,10 @@ namespace Pitstop.Application.VehicleManagement
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public override void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
         {
+            base.Configure(app);
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(_configuration)
                 .Enrich.WithMachineName()

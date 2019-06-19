@@ -12,10 +12,13 @@ namespace VehicleManagementAPI.ContractTests
         private static string _providerUri;
         private static IWebHost _webHost;
         private static PactVerifierConfig _config;
+        private static TestContext _testContext;
 
         [ClassInitialize]
         public static void SetUpWebHost(TestContext context)
         {
+            _testContext = context;
+
             _config = new PactVerifierConfig
             {
                 Outputters = new List<IOutput> { new MsTestOutput(context) },
@@ -23,7 +26,7 @@ namespace VehicleManagementAPI.ContractTests
             };
             _providerUri = "http://localhost:9001";
 
-            _webHost = new WebHostBuilder()
+            _webHost = Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
                 .UseUrls(_providerUri)
                 .UseStartup<TestStartup>()
                 .Build();
@@ -37,7 +40,7 @@ namespace VehicleManagementAPI.ContractTests
             var pactVerifier = new PactVerifier(_config);
             pactVerifier
                 .ProviderState($"{_providerUri}/provider-states")
-                .ServiceProvider($"vehicle management", _providerUri)
+                .ServiceProvider($"Vehicle Management", _providerUri)
                 .PactUri($"..\\..\\..\\..\\WebApp.ContractTests\\pacts\\pitstop_web_app-vehicle_management.json")
                 .Verify();
         }
