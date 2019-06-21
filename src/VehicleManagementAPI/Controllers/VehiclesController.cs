@@ -31,6 +31,8 @@ namespace Pitstop.Application.VehicleManagement.Controllers
 
         [HttpGet]
         [Route("{licenseNumber}", Name = "GetByLicenseNumber")]
+        [ProducesResponseType(typeof(Vehicle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByLicenseNumber(string licenseNumber)
         {
             var vehicle = await _vehicleRepository.GetByLicenseNumberAsync(licenseNumber);
