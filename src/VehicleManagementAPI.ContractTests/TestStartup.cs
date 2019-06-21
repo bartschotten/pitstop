@@ -22,9 +22,9 @@ namespace VehicleManagementAPI.ContractTests
             services.AddTransient<IMessagePublisher>(m => new Mock<IMessagePublisher>().Object);
         }
 
-        public override void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app)
         {
-            base.Configure(app);
+            base.ConfigureApp(app);
 
             app.UseMiddleware<ProviderStateMiddleware>();
         }      

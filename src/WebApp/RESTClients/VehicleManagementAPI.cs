@@ -27,7 +27,9 @@ namespace WebApp.RESTClients
         {
             try
             {
-                return await _client.GetVehicleByLicenseNumber(licenseNumber);
+                var vehicle = await _client.GetVehicleByLicenseNumber(licenseNumber);
+                vehicle.LicenseNumber = licenseNumber;
+                return vehicle;
             }
             catch (ApiException ex)
             {

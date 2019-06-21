@@ -53,7 +53,7 @@ namespace Pitstop.Application.VehicleManagement
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, VehicleManagementDBContext dbContext)
         {
-            base.Configure(app);
+            base.ConfigureApp(app);
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(_configuration)

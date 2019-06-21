@@ -16,16 +16,14 @@ namespace WebApp.ContractTests
         private static IPactBuilder _pactBuilder;
         private readonly IMockProviderService _mockProviderService;
         private readonly int _mockServerPort = 9222;
-        private readonly string _mockProviderHostAndPort;
 
         public VehicleManagementApiConsumerTests()
         {
             _pactBuilder = new PactBuilder(new PactConfig { SpecificationVersion = "2.0.0" })
-            .ServiceConsumer("Pitstop Web App")
-            .HasPactWith("Vehicle Management");
+                .ServiceConsumer("Pitstop Web App")
+                .HasPactWith("Vehicle Management");
 
             _mockProviderService = _pactBuilder.MockService(_mockServerPort, false, IPAddress.Any);
-            _mockProviderHostAndPort = $"localhost:{_mockServerPort}";
         }
 
         [ClassCleanup]
@@ -62,12 +60,13 @@ namespace WebApp.ContractTests
                     }
                 });
 
-            var consumer = new VehicleManagementAPI(_mockProviderHostAndPort);
+            var consumer = new VehicleManagementAPI($"localhost:{_mockServerPort}");
 
             //Act + Assert
             var response = await consumer.GetVehicleByLicenseNumber(licenseNumber);
 
             Assert.IsNotNull(response);
+            Assert.AreEqual(licenseNumber, response.LicenseNumber);
             Assert.IsNotNull(response.Brand);
             Assert.IsNotNull(response.Type);
             Assert.IsNotNull(response.OwnerId);

@@ -12,13 +12,10 @@ namespace VehicleManagementAPI.ContractTests
         private static string _providerUri;
         private static IWebHost _webHost;
         private static PactVerifierConfig _config;
-        private static TestContext _testContext;
 
         [ClassInitialize]
         public static void SetUpWebHost(TestContext context)
         {
-            _testContext = context;
-
             _config = new PactVerifierConfig
             {
                 Outputters = new List<IOutput> { new MsTestOutput(context) },

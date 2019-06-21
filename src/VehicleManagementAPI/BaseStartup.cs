@@ -26,7 +26,7 @@ namespace Pitstop.Application.VehicleManagement
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public virtual void Configure(IApplicationBuilder app)
+        public void ConfigureApp(IApplicationBuilder app)
         {
             app.UseMvc();
             app.UseDefaultFiles();
