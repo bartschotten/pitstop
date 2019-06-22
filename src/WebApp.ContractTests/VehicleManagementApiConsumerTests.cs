@@ -7,21 +7,30 @@ using System.Collections.Generic;
 using WebApp.RESTClients;
 using Match = PactNet.Matchers.Match;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace WebApp.ContractTests
 {
     [TestClass]
     public class VehicleManagementApiConsumerTests
     {
+        private static PactConfig _pactConfig;
         private static IPactBuilder _pactBuilder;
         private readonly IMockProviderService _mockProviderService;
         private readonly int _mockServerPort = 9222;
 
         public VehicleManagementApiConsumerTests()
         {
-            _pactBuilder = new PactBuilder(new PactConfig { SpecificationVersion = "2.0.0" })
-                .ServiceConsumer("Pitstop Web App")
-                .HasPactWith("Vehicle Management");
+            _pactConfig = new PactConfig
+            {
+                SpecificationVersion = "2.0.0",
+                PactDir = "..\\..\\..\\pacts",
+                LogDir = "..\\..\\..\\logs"
+            };
+
+            _pactBuilder = new PactBuilder(_pactConfig)
+                .ServiceConsumer("pitstop-web-app")
+                .HasPactWith("vehicle-management");
 
             _mockProviderService = _pactBuilder.MockService(_mockServerPort, false, IPAddress.Any);
         }
@@ -30,6 +39,13 @@ namespace WebApp.ContractTests
         public static void WriteContract()
         {
             _pactBuilder.Build();
+
+            var publisher = new PactPublisher("http://localhost:9292");
+
+            foreach (var file in Directory.GetFiles(_pactConfig.PactDir))
+            {
+                publisher.PublishToBroker(file, "1.0", new List<string> { "local" });
+            }
         }
 
         [TestMethod]

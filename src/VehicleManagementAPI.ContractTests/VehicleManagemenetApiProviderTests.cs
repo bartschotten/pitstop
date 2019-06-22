@@ -19,7 +19,9 @@ namespace VehicleManagementAPI.ContractTests
             _config = new PactVerifierConfig
             {
                 Outputters = new List<IOutput> { new MsTestOutput(context) },
-                Verbose = true
+                Verbose = true,
+                ProviderVersion = "1.0",
+                PublishVerificationResults = true
             };
             _providerUri = "http://localhost:9001";
 
@@ -37,8 +39,8 @@ namespace VehicleManagementAPI.ContractTests
             var pactVerifier = new PactVerifier(_config);
             pactVerifier
                 .ProviderState($"{_providerUri}/provider-states")
-                .ServiceProvider($"Vehicle Management", _providerUri)
-                .PactUri($"..\\..\\..\\..\\WebApp.ContractTests\\pacts\\pitstop_web_app-vehicle_management.json")
+                .ServiceProvider($"vehicle-management", _providerUri)
+                .PactUri("http://localhost:9292/pacts/provider/vehicle-management/consumer/pitstop-web-app/latest")
                 .Verify();
         }
 
